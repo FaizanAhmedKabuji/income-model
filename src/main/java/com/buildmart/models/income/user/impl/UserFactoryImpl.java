@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import static com.buildmart.models.income.metrics.Metrics.totalUserCount;
-import static com.buildmart.models.income.contants.NamingConstants.AAVAK_MAIN_ACCOUNT;
+import static com.buildmart.models.income.contants.NamingConstants.PARENT;
 
 @Service
 public class UserFactoryImpl implements UserFactory {
@@ -37,19 +38,24 @@ public class UserFactoryImpl implements UserFactory {
                 }
             }
         }
-
         PARENT_USER = new User(0, null);
-        PARENT_USER.setProfile(AAVAK_MAIN_ACCOUNT);
+        PARENT_USER.setProfile(PARENT);
         PARENT_USER.setTotalRp(0.0);
         PARENT_USER.setCurrentMonthRp(0.0);
         PARENT_USER.setTotalRp(0.0);
+
+        WEIGHT_ADJUSTED_PROFILE_MAP.remove(WEIGHT_ADJUSTED_PROFILE_MAP.firstKey());
+        PROFILE_MAP.remove(PARENT);
     }
 
     @Override
     public User getNewUserBasedOnProbablity(int id, User parent, double probability) {
-        var profileName = WEIGHT_ADJUSTED_PROFILE_MAP.floorEntry(probability).getValue();
+        var entry = WEIGHT_ADJUSTED_PROFILE_MAP.floorEntry(probability);
+        if (Objects.isNull(entry)) {
+            entry = WEIGHT_ADJUSTED_PROFILE_MAP.firstEntry();
+        }
+        var profileName = entry.getValue();
         ModelDefiningConstants.Profile profile = PROFILE_MAP.get(profileName);
-
         User user = new User(++totalUserCount, parent);
         user.setProfile(profile.profileName());
         return user;

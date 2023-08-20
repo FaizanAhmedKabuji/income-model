@@ -45,7 +45,7 @@ public class ModelDefiningConstants {
      */
     public static final List<Profile> PROFILES = List.of(
             new Profile(
-                    "aavak_main_account", 0,
+                    "parent", 0,
                     List.of(
                             new UserAddCountWeightMap(0, 5),
                             new UserAddCountWeightMap(3, 50),
