@@ -1,4 +1,4 @@
-package com.buildmart.test.incomemodel;
+package com.buildmart.models.income;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
